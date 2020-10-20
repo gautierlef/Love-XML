@@ -1,2 +1,2 @@
 # Love-XML
-# Antoine Maathes Gautier
+# Antoine Maathess Gautier

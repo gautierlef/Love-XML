@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+#include <ctype.h>
 
-int checkFiles();						//Vérification de l'existence des fichiers.
-char *getFileContent(char *filePath);	//Récupération du contenu d'un fichier.
-int checkStartToEndDTD();				//Vérification du début et de la fin de la DTD.
+int checkFiles();							//Vérification de l'existence des fichiers.
+char *getFileContent(char *filePath);		//Récupération du contenu d'un fichier.
+int checkStartToEndDTD();					//Vérification du début et de la fin de la DTD.
+void removeMultipleSpaces(char *str);		//Remplace les espaces multiples par un espace.
+void replaceTabAndLineWithSpace(char *str);	//Remplace les \t et \n par un espace.
 
 int main(int argc, char **argv)
 {
@@ -17,6 +21,10 @@ int main(int argc, char **argv)
 	}
 	char *dtdContent = getFileContent(argv[1]);
 	char *xmlContent = getFileContent(argv[2]);
+/*	replaceTabAndLineWithSpace(dtdContent);
+	replaceTabAndLineWithSpace(xmlContent);*/
+	removeMultipleSpaces(dtdContent);
+	removeMultipleSpaces(xmlContent);
 	printf("DTD :\n%s", dtdContent);
 	printf("\nXML :\n%s", xmlContent);
 	return 0;
@@ -43,6 +51,26 @@ char *getFileContent(char *filePath) {
 	fread(content, 1, fileSize, file);		//Lecture et création de la chaine de caractères.
 	fclose(file);
 	return content;
+}
+
+void replaceTabAndLineWithSpace(char* str) {
+	for (int i = 0; str[i] != '\0'; i = i + 1) {
+		if (str[i] == '\t' || str[i] == '\n') {
+			str[i] = ' ';
+		}
+	}
+}
+
+void removeMultipleSpaces(char *str)
+{
+    char *dest = str;
+    while (*str != '\0') {
+        while (*str == ' ' && *(str + 1) == ' ') {
+            str++;
+		}
+       *dest++ = *str++;
+    }
+    *dest = '\0';
 }
 
 /*

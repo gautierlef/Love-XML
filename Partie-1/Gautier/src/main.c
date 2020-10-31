@@ -6,7 +6,7 @@
 
 int checkFiles();							//Vérification de l'existence des fichiers.
 char *getFileContent(char *filePath);		//Récupération du contenu d'un fichier.
-int checkStartToEndDTD();					//Vérification du début et de la fin de la DTD.
+int checkOpenEndDTD(char *dtd);					//Vérification du nombre d'élément dans la dtd
 void removeMultipleSpaces(char *str);		//Remplace les espaces multiples par un espace.
 void replaceTabAndLineWithSpace(char *str);	//Remplace les \t et \n par un espace.
 
@@ -21,12 +21,17 @@ int main(int argc, char **argv)
 	}
 	char *dtdContent = getFileContent(argv[1]);
 	char *xmlContent = getFileContent(argv[2]);
-/*	replaceTabAndLineWithSpace(dtdContent);
-	replaceTabAndLineWithSpace(xmlContent);*/
+	replaceTabAndLineWithSpace(dtdContent);
+	replaceTabAndLineWithSpace(xmlContent);
 	removeMultipleSpaces(dtdContent);
 	removeMultipleSpaces(xmlContent);
-	printf("DTD :\n%s", dtdContent);
-	printf("\nXML :\n%s", xmlContent);
+	printf("DTD :\n%s\n", dtdContent);
+	printf("XML :\n%s\n", xmlContent);
+//	checkStartToEndDTD(dtdContent);
+	if (checkOpenEndDTD(dtdContent) == -1) {
+		printf("\nErreur\n");
+		return -1;
+	}
 	return 0;
 }
 
@@ -73,7 +78,22 @@ void removeMultipleSpaces(char *str)
     *dest = '\0';
 }
 
-/*
-int checkStartToEndDTD() {
-	
-}*/
+
+int checkOpenEndDTD(char *dtd) {
+	int nbOp = 0;
+	if (dtd[0] != '<' && dtd[1] != '!') {	//On vérifie que les 2 premiers caractères correspondent à l'ouverture d'une DTD.
+		return -1;
+	}
+	for (int i = 0; dtd[i + 1] != '\0'; i = i + 1) {	//On compte les ouvertures : <! et fermeture : > afin de vérifier que le nombre d'ouverture corresponde au nombre de fermeture d'élément.
+		if (dtd[i] == '<' && dtd[i + 1] == '!') {
+			nbOp = nbOp + 1;
+		}
+		if (dtd[i] == '>') {
+			nbOp = nbOp - 1;
+		}
+	}
+	if (nbOp != 0) {
+		return -1;
+	}
+	return 0;
+}

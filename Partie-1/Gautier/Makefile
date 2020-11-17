@@ -16,6 +16,8 @@ CFLAGS	+=	-I./include/
 NAME	=	XML
 
 SRC	=	src/main.c			\
+		src/getAndCheckFiles.c		\
+		src/getAndCheckElements.c	\
 
 OBJS	=	$(SRC:.c=.o)
 

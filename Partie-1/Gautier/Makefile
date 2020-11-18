@@ -18,6 +18,7 @@ NAME	=	XML
 SRC	=	src/main.c			\
 		src/getAndCheckFiles.c		\
 		src/getAndCheckElements.c	\
+		src/checkElementsInXml.c	\
 
 OBJS	=	$(SRC:.c=.o)
 

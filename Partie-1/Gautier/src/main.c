@@ -25,5 +25,9 @@ int main(int argc, char **argv)
 	for (int i = 0; elements[i].name[0] != '\0'; i = i + 1) {
 		printf("Element numéro %d : %s\n", i, elements[i].name);
 	}
+	if (checkElements(xmlContent, elements) != 0) {
+		return -1;
+	}
+	printf("Fichiers corrects!\n");
 	return 0;
 }
